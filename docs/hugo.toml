@@ -1,0 +1,5 @@
+baseURL = "https://yoshiki830.github.io/songacha/"
+defaultContentLanguage = "en"
+title = "songacha"
+
+disableKinds = ["taxonomy", "term"]
