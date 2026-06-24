@@ -1,4 +1,7 @@
+//! Core functions for loading songs, drawing songs, and managing collection data.
+
 use rand::SeedableRng;
+
 use rand::rngs::StdRng;
 use rand::seq::SliceRandom;
 use serde::{Deserialize, Serialize};
@@ -7,6 +10,7 @@ use std::error::Error;
 use std::fs;
 use std::path::Path;
 
+/// A song record loaded from the local CSV file.
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq)]
 pub struct Song {
     pub id: u32,
@@ -16,23 +20,27 @@ pub struct Song {
     pub disc: u8,
 }
 
+/// Local save data that stores how many times each song has been drawn.
 #[derive(Debug, Clone, Deserialize, Serialize, Default, PartialEq, Eq)]
 pub struct SaveData {
     pub pull_counts: HashMap<u32, u32>,
 }
 
+/// Summary of the user's collection progress.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct CollectionProgress {
     pub collected_count: usize,
     pub total_count: usize,
 }
 
+/// A song with its draw count, used for ranking output.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct DrawnSong {
     pub song: Song,
     pub count: u32,
 }
 
+/// Loads song records from a CSV file.
 pub fn load_songs_from_path<P: AsRef<Path>>(path: P) -> Result<Vec<Song>, Box<dyn Error>> {
     let mut reader = csv::Reader::from_path(path)?;
     let mut songs = Vec::new();
@@ -44,6 +52,7 @@ pub fn load_songs_from_path<P: AsRef<Path>>(path: P) -> Result<Vec<Song>, Box<dy
     Ok(songs)
 }
 
+/// Loads save data from a JSON file.
 pub fn load_save_data_from_path<P: AsRef<Path>>(path: P) -> Result<SaveData, Box<dyn Error>> {
     let path = path.as_ref();
 
@@ -60,6 +69,7 @@ pub fn load_save_data_from_path<P: AsRef<Path>>(path: P) -> Result<SaveData, Box
     Ok(serde_json::from_str(&text)?)
 }
 
+/// Writes save data to a JSON file.
 pub fn write_save_data_to_path<P: AsRef<Path>>(
     path: P,
     save_data: &SaveData,
@@ -78,6 +88,7 @@ pub fn write_save_data_to_path<P: AsRef<Path>>(
     Ok(())
 }
 
+/// Draws songs randomly from the given song list.
 pub fn draw_songs(songs: &[Song], count: usize, seed: Option<u64>) -> Vec<Song> {
     if songs.is_empty() || count == 0 {
         return Vec::new();
@@ -95,12 +106,14 @@ pub fn draw_songs(songs: &[Song], count: usize, seed: Option<u64>) -> Vec<Song> 
     }
 }
 
+/// Updates save data using the songs drawn by the user.
 pub fn record_pulled_songs(save_data: &mut SaveData, songs: &[Song]) {
     for song in songs {
         *save_data.pull_counts.entry(song.id).or_insert(0) += 1;
     }
 }
 
+/// Calculates how many songs have been collected.
 pub fn collection_progress(songs: &[Song], save_data: &SaveData) -> CollectionProgress {
     let collected_ids: HashSet<u32> = save_data.pull_counts.keys().copied().collect();
 
@@ -113,6 +126,7 @@ pub fn collection_progress(songs: &[Song], save_data: &SaveData) -> CollectionPr
     }
 }
 
+/// Returns songs that have not been collected yet.
 pub fn missing_songs(songs: &[Song], save_data: &SaveData) -> Vec<Song> {
     let collected_ids: HashSet<u32> = save_data.pull_counts.keys().copied().collect();
 
@@ -123,6 +137,7 @@ pub fn missing_songs(songs: &[Song], save_data: &SaveData) -> Vec<Song> {
         .collect()
 }
 
+/// Returns drawn songs sorted by draw count.
 pub fn drawn_song_ranking(songs: &[Song], save_data: &SaveData) -> Vec<DrawnSong> {
     let mut ranking: Vec<DrawnSong> = songs
         .iter()
