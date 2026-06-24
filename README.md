@@ -81,6 +81,13 @@ It means a small CLI tool that randomly draws songs like a gacha.
 
 This project is unofficial and is not affiliated with Perfume or any related organizations.
 
+
+## Website
+
+The project website is available at:
+
+    https://yoshiki830.github.io/songacha/
+
 ## License
 
 This project is licensed under the MIT License.

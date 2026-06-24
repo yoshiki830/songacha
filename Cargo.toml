@@ -6,6 +6,8 @@ authors = ["Yoshiki Hasegawa"]
 description = "A CLI song gacha tool using Perfume songs as sample data."
 license = "MIT"
 repository = "https://github.com/yoshiki830/songacha"
+homepage = "https://yoshiki830.github.io/songacha/"
+documentation = "https://yoshiki830.github.io/songacha/"
 readme = "README.md"
 
 [dependencies]
