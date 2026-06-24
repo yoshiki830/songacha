@@ -1,5 +1,7 @@
 # songacha
 
+[![build](https://github.com/yoshiki830/songacha/actions/workflows/build.yaml/badge.svg)](https://github.com/yoshiki830/songacha/actions/workflows/build.yaml)
+
 A command line song gacha tool using Perfume songs as sample data.
 
 ## Overview
