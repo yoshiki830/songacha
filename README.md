@@ -84,3 +84,47 @@ This project is unofficial and is not affiliated with Perfume or any related org
 ## License
 
 This project is licensed under the MIT License.
+
+## Current Implementation
+
+The current version supports the following features:
+
+- Load song metadata from a local CSV file
+- Draw one or more songs randomly
+- Use a random seed for reproducible results
+- Save pull history to a local JSON file
+- Show collected songs
+- Show missing songs
+- Show collection progress
+- Show frequently drawn songs ranking
+- Reset local save data
+
+## Examples
+
+Draw three songs with a fixed seed:
+
+    songacha pull --count 3 --seed 42
+
+Show collected songs:
+
+    songacha collection
+
+Show missing songs:
+
+    songacha collection --missing
+
+Show frequently drawn songs:
+
+    songacha ranking
+
+Reset save data:
+
+    songacha reset
+
+Use a custom song data file:
+
+    songacha --data-file data/perfume_p_cubed.csv pull
+
+Use a custom save file:
+
+    songacha --save-file save.json pull
