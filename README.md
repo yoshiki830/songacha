@@ -128,3 +128,5 @@ Use a custom song data file:
 Use a custom save file:
 
     songacha --save-file save.json pull
+
+    songacha --save-file save.json pull
