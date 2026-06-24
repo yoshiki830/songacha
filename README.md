@@ -130,3 +130,11 @@ Use a custom save file:
     songacha --save-file save.json pull
 
     songacha --save-file save.json pull
+
+## Sample Data
+
+The default sample data contains 52 songs from Perfume The Best P Cubed.
+
+The CSV file is located at:
+
+    data/perfume_p_cubed.csv
