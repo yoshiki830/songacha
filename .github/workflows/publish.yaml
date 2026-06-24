@@ -1,0 +1,42 @@
+name: publish
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    if: startsWith(github.head_ref, 'releases/v') && github.event.pull_request.merged == true
+
+    steps:
+      - name: Get version from branch name
+        id: vars
+        run: |
+          echo "tag=${GITHUB_HEAD_REF##*/v}" >> $GITHUB_OUTPUT
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Build distribution file
+        run: |
+          .github/scripts/make_distribution_files.sh ${{ steps.vars.outputs.tag }}
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create v${{ steps.vars.outputs.tag }} dist/*.tar.gz \
+            --title "Release v${{ steps.vars.outputs.tag }}" \
+            --draft \
+            --generate-notes
