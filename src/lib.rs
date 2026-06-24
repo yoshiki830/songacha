@@ -1,6 +1,6 @@
+use rand::SeedableRng;
 use rand::rngs::StdRng;
 use rand::seq::SliceRandom;
-use rand::SeedableRng;
 use serde::{Deserialize, Serialize};
 use std::error::Error;
 use std::path::Path;
@@ -42,7 +42,11 @@ pub fn draw_songs(songs: &[Song], count: usize, seed: Option<u64>) -> Vec<Song> 
     }
 }
 
-fn draw_songs_with_rng<R: rand::Rng + ?Sized>(songs: &[Song], count: usize, rng: &mut R) -> Vec<Song> {
+fn draw_songs_with_rng<R: rand::Rng + ?Sized>(
+    songs: &[Song],
+    count: usize,
+    rng: &mut R,
+) -> Vec<Song> {
     (0..count)
         .filter_map(|_| songs.choose(rng).cloned())
         .collect()
